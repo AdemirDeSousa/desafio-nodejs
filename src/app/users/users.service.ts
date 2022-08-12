@@ -35,6 +35,10 @@ export class UsersService {
     }
   }
 
+  async findOneByEmail(email: string) {
+    return await this.usersRepo.findOneOrFail({ email });
+  }
+
   async create(data: CreateUserDto) {
     const existUser = await this.usersRepo.findOne({
       email: data.email,

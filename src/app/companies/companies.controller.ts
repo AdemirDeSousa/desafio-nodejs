@@ -7,13 +7,16 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CreateHistoricDto } from './dto/create-historic.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Controller('api/v1/companies')
+@UseGuards(AuthGuard('jwt'))
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
