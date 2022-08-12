@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { UsersController } from './users.controller';
-import { UsersEntity } from './users.entity';
+import { UsersEntity } from './entities/users.entity';
 import { UsersService } from './users.service';
 
 const usersEntityList: UsersEntity[] = [
