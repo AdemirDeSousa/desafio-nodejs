@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -30,6 +30,7 @@ describe('UsersService', () => {
           provide: getRepositoryToken(UsersEntity),
           useValue: {
             find: jest.fn().mockResolvedValue(usersEntityList),
+            findOne: jest.fn().mockResolvedValue(undefined),
             findOneOrFail: jest.fn().mockResolvedValue(usersEntityList[0]),
             create: jest.fn().mockReturnValue(usersEntityList[0]),
             save: jest.fn().mockResolvedValue(usersEntityList[0]),
@@ -90,25 +91,28 @@ describe('UsersService', () => {
   });
 
   describe('create method', () => {
+    const data: CreateUserDto = {
+      name: 'Ademir',
+      email: 'email@gmail.com',
+      password: 'password',
+    };
     it('should create a user', async () => {
-      const data: CreateUserDto = {
-        name: 'Ademir',
-        email: 'email@gmail.com',
-        password: 'password',
-      };
-
       const result = await usersService.create(data);
 
       expect(result).toEqual(usersEntityList[0]);
     });
 
-    it('should throw an exception', () => {
-      const data: CreateUserDto = {
-        name: 'Ademir',
-        email: 'email@gmail.com',
-        password: 'password',
-      };
+    it('should throw an bad request exception', () => {
+      jest
+        .spyOn(usersRepo, 'findOne')
+        .mockResolvedValueOnce(usersEntityList[0]);
 
+      expect(usersService.create(data)).rejects.toThrowError(
+        BadRequestException,
+      );
+    });
+
+    it('should throw an exception', () => {
       jest.spyOn(usersRepo, 'save').mockRejectedValueOnce(new Error());
 
       expect(usersService.create(data)).rejects.toThrowError();
