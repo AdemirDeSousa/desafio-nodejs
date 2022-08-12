@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
+import { CreateHistoricDto } from './dto/create-historic.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Controller('api/v1/companies')
@@ -39,5 +40,20 @@ export class CompaniesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.companiesService.remove(id);
+  }
+
+  @Post(':id/check-in')
+  checkIn(@Param('id') id: string, @Body() data: CreateHistoricDto) {
+    return this.companiesService.checkIn(id, data);
+  }
+
+  @Post(':id/check-out')
+  checkOut(@Param('id') id: string, @Body() data: CreateHistoricDto) {
+    return this.companiesService.checkOut(id, data);
+  }
+
+  @Get(':id/reports')
+  reports(@Param('id') id: string) {
+    return this.companiesService.reports(id);
   }
 }

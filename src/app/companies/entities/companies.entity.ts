@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { HistoricsEntity } from './historics.entity';
 
 @Entity()
 export class CompaniesEntity {
@@ -34,6 +36,9 @@ export class CompaniesEntity {
 
   @Column({ name: 'actual_qtd_cars', default: 0 })
   actualQtdCars: number;
+
+  @OneToMany(() => HistoricsEntity, (historic) => historic.company)
+  historic: HistoricsEntity[];
 
   @CreateDateColumn({
     type: 'timestamp',

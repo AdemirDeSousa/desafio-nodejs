@@ -1,35 +1,27 @@
-import { HistoricsEntity } from 'src/app/companies/entities/historics.entity';
+import { VehiclesEntity } from 'src/app/vehicles/entities/vehicles.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CompaniesEntity } from './companies.entity';
 
 @Entity()
-export class VehiclesEntity {
+export class HistoricsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  brand: string;
-
-  @Column()
-  model: string;
-
-  @Column()
-  color: string;
-
-  @Column({ name: 'license_plate', unique: true })
-  licensePlate: string;
-
-  @Column()
   type: string;
 
-  @OneToMany(() => HistoricsEntity, (historic) => historic.vehicle)
-  historic: HistoricsEntity[];
+  @ManyToOne(() => CompaniesEntity, (company) => company.historic)
+  company: CompaniesEntity;
+
+  @ManyToOne(() => VehiclesEntity, (vehicle) => vehicle.historic)
+  vehicle: VehiclesEntity;
 
   @CreateDateColumn({
     type: 'timestamp',

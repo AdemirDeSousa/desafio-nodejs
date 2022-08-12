@@ -49,6 +49,20 @@ export class VehiclesService {
     }
   }
 
+  async findByLicensePlante(licensePlate: string) {
+    const vehicle = await this.vehiclesRepo.findOne({
+      licensePlate,
+    });
+
+    if (!vehicle) {
+      throw new BadRequestException([
+        'Veículo com a placa informada não cadastrado. Realize o cadastro e tente novamente',
+      ]);
+    }
+
+    return vehicle;
+  }
+
   async update(id: string, data: UpdateVehicleDto) {
     const vehicle = await this.findOne(id);
     this.vehiclesRepo.merge(vehicle, data);
